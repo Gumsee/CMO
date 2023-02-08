@@ -1,0 +1,2 @@
+# CMO
+CMO Discord Bot

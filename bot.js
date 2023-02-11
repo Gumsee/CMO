@@ -108,7 +108,7 @@ client.login(token);
 
 setInterval(function() {
     circleColors();
-}, 300000);
+}, 600000);
 }
 catch(err) {
     console.error(err.message);

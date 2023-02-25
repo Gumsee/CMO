@@ -1,0 +1,22 @@
+{
+    "votes": [
+        {
+            "message": "Wähle deine lieblingsfarbe aus!",
+            "answers": [
+                "❤️",
+                "🧡",
+                "💛",
+                "💚",
+                "💙",
+                "💜",
+                "🤎",
+                "🖤",
+                "🤍"
+            ],
+            "onlyone": true,
+            "channel": "1078390864340066384",
+            "guild": "1053792122312081529",
+            "funcfile": "favcolor"
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+{
+    "rulessets": [
+        {
+            "setname" : "Allgemeine Regeln",
+            "rules": [
+            ]
+        },
+        {
+            "setname" : "ET Regeln",
+            "rules": [
+                "Keine Drogen jeglicher Art auf dem ET",
+                "Alkohol wird so konsumiert, wie es das Gesetz vorgibt (U18 keinen härteren Alkohol sowie Bier, Wein ab 16) dies aber auch nicht eskalieren lassen",
+                "Dies ist ein ET und kein Schlafzimmer, also bitten wir euch drum euren Spaß mit Vorlieben Zuhause zu lassen und nicht im Gebüsch zu verschwinden",
+                "Sagt bitte Bescheid, wenn ihr irgendwo hingehen wollt, damit wir Bescheid wissen und uns nicht grundlos Sorgen machen",
+                "Wenn ihr Leute mitbringen wollt, sagt bitte einen der Admins Bescheid, damit wir vorbereitet sind",
+                "Am linken Handgelenk muss ein Knicklicht getragen werden."
+            ]
+        }
+    ]
+}

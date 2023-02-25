@@ -105,4 +105,4 @@ dist
 .tern-port
 
 #secrets
-secrets.json
+secret.json

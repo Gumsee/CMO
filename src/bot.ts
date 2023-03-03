@@ -73,12 +73,12 @@ client.on(Events.MessageCreate, (message : Message) => {
     if(mainGuild == undefined)
         return;
 
-    //const badpattern = /[Tt]omm*i*[^ ]*/g;
-    /*if(msg.match(badpattern)?.[0].toLowerCase() !== "tom")
+    const badpattern = /[Tt]om[a-zA-Z]*[^ ]*/g;
+    if(msg.match(badpattern)?.[0].toLowerCase() != undefined && msg.match(badpattern)?.[0].toLowerCase() !== "tom")
     {
         message.channel.send(message.author.toString() + " schrieb: " + message.content.replace(badpattern, "Tom"))
         message.delete();
-    }*/
+    }
 
     if     (msg === ".joinmsg")    { message.client.emit(Events.GuildMemberAdd, message.member); }
     else if(msg === ".leavemsg")   { message.client.emit(Events.GuildMemberRemove, message.member); }

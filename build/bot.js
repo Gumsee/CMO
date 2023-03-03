@@ -46,11 +46,17 @@ client.on(Events.ClientReady, () => {
     rules.initRules(client, mainGuild, ruleschannel);
 });
 client.on(Events.MessageCreate, (message) => {
+    var _a, _b;
     var msg = message.content.toLowerCase();
     if (message.author.id === botid)
         return;
     if (mainGuild == undefined)
         return;
+    const badpattern = /[Tt]om[a-zA-Z]*[^ ]*/g;
+    if (((_a = msg.match(badpattern)) === null || _a === void 0 ? void 0 : _a[0].toLowerCase()) != undefined && ((_b = msg.match(badpattern)) === null || _b === void 0 ? void 0 : _b[0].toLowerCase()) !== "tom") {
+        message.channel.send(message.author.toString() + " schrieb: " + message.content.replace(badpattern, "Tom"));
+        message.delete();
+    }
     if (msg === ".joinmsg") {
         message.client.emit(Events.GuildMemberAdd, message.member);
     }

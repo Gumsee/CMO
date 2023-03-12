@@ -61,8 +61,6 @@ client.on(discord_js_1.Events.ClientReady, () => {
         commands = new commands_1.Commands(weirdosrole, publicchannel);
     votes.initVotes(client, mainGuild);
     rules.initRules(client, mainGuild, ruleschannel);
-    if (audiochannel != undefined)
-        (0, voice_1.joinVoice)(audiochannel, mainGuild);
 });
 client.on(discord_js_1.Events.MessageCreate, (message) => {
     var _a, _b;
@@ -89,6 +87,9 @@ client.on(discord_js_1.Events.MessageCreate, (message) => {
     }
     else if (msg === ".joinvoice" && audiochannel != undefined) {
         (0, voice_1.joinVoice)(audiochannel, mainGuild);
+    }
+    else if (msg === ".leavevoice" && audiochannel != undefined) {
+        (0, voice_1.leaveVoice)(mainGuild);
     }
     else if (msg === "<@" + botid + ">") {
         message.channel.send(message.author.toString());

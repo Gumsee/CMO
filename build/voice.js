@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.joinVoice = void 0;
+exports.leaveVoice = exports.joinVoice = void 0;
 const voice_1 = require("@discordjs/voice");
 function joinVoice(channel, guild) {
     const player = (0, voice_1.createAudioPlayer)();
@@ -18,3 +18,8 @@ function joinVoice(channel, guild) {
     connection.subscribe(player);
 }
 exports.joinVoice = joinVoice;
+function leaveVoice(guild) {
+    const connection = (0, voice_1.getVoiceConnection)(guild.id);
+    connection === null || connection === void 0 ? void 0 : connection.disconnect();
+}
+exports.leaveVoice = leaveVoice;

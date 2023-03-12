@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.channelContainsMessageByMe = exports.findGuildRoleByLowercaseName = exports.findGuildMemberById = exports.findGuildById = exports.findTextChannelById = exports.findTextChannelByName = void 0;
+exports.channelContainsMessageByMe = exports.findGuildRoleByLowercaseName = exports.findGuildMemberById = exports.findGuildById = exports.findVoiceChannelById = exports.findTextChannelById = exports.findTextChannelByName = void 0;
 const botid = require("../secret.json").botid;
 function findTextChannelByName(channels, name) {
     var _a;
@@ -20,6 +20,10 @@ function findTextChannelById(channels, id) {
     return channels.cache.find(channel => channel.id === id);
 }
 exports.findTextChannelById = findTextChannelById;
+function findVoiceChannelById(channels, id) {
+    return channels.cache.find(channel => channel.id === id);
+}
+exports.findVoiceChannelById = findVoiceChannelById;
 function findGuildById(guilds, id) {
     return guilds.cache.find(guild => guild.id === id);
 }

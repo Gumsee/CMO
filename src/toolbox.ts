@@ -1,4 +1,4 @@
-import { Channel, Collection, Guild, GuildChannelManager, GuildManager, GuildMember, Message, Role, TextChannel } from "discord.js";
+import { Channel, Collection, Guild, GuildChannelManager, GuildManager, GuildMember, Message, Role, TextChannel, VoiceChannel } from "discord.js";
 
 const botid : string = require("../secret.json").botid;
 
@@ -10,6 +10,11 @@ export function findTextChannelByName(channels : GuildChannelManager, name : str
 export function findTextChannelById(channels : GuildChannelManager, id : string)
 {
     return (channels.cache.find(channel => channel.id === id) as TextChannel | undefined);
+}
+
+export function findVoiceChannelById(channels : GuildChannelManager, id : string)
+{
+    return (channels.cache.find(channel => channel.id === id) as VoiceChannel | undefined);
 }
 
 export function findGuildById(guilds : GuildManager, id : string) : Guild | undefined

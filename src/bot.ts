@@ -113,7 +113,7 @@ client.on(Events.MessageCreate, (message : Message) => {
     else if(msg === ".leavemsg")   { message.client.emit(Events.GuildMemberRemove, message.member); }
     else if(msg === ".checkroles") { commands?.checkRoles(mainGuild); }
     else if(msg === ".joinvoice" && audiochannel != undefined)  { joinVoice(audiochannel, mainGuild); }
-    else if(msg === ".leavevoice" && audiochannel != undefined) { leaveVoice(mainGuild); }
+    else if(msg === ".leavevoice" && audiochannel != undefined) { leaveVoice(); }
     else if(msg === "<@"+botid+">") { message.channel.send(message.author.toString()); }
     //else if(msg === "tetete") { publicchannel?.send("<@268156465674452994> ich will ein kind von dir 😩"); }
     else if(msg === ".benis-o-meter")

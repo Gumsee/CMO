@@ -89,7 +89,7 @@ client.on(discord_js_1.Events.MessageCreate, (message) => {
         (0, voice_1.joinVoice)(audiochannel, mainGuild);
     }
     else if (msg === ".leavevoice" && audiochannel != undefined) {
-        (0, voice_1.leaveVoice)(mainGuild);
+        (0, voice_1.leaveVoice)();
     }
     else if (msg === "<@" + botid + ">") {
         message.channel.send(message.author.toString());

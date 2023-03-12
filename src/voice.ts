@@ -1,6 +1,8 @@
 import { Guild, VoiceChannel } from "discord.js";
 import { AudioPlayerStatus, createAudioPlayer, createAudioResource, generateDependencyReport, getVoiceConnection, joinVoiceChannel, VoiceConnection } from '@discordjs/voice';
 
+var connection : VoiceConnection | undefined;
+
 export function joinVoice(channel : VoiceChannel, guild : Guild)
 {
     const player = createAudioPlayer();
@@ -15,7 +17,7 @@ export function joinVoice(channel : VoiceChannel, guild : Guild)
     //resource.volume?.setVolume(0.5);
     //player.play(resource);
 
-    const connection : VoiceConnection = joinVoiceChannel({
+    connection = joinVoiceChannel({
         channelId: channel.id,
         guildId: guild.id,
         adapterCreator: guild.voiceAdapterCreator,
@@ -23,8 +25,7 @@ export function joinVoice(channel : VoiceChannel, guild : Guild)
     connection.subscribe(player);
 }
 
-export function leaveVoice(guild : Guild)
+export function leaveVoice()
 {
-    const connection = getVoiceConnection(guild.id);
     connection?.disconnect();
 }

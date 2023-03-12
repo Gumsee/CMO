@@ -7,7 +7,7 @@ const votes = require("./votes");
 const rules = require("./rules");
 import { Commands } from "./commands";
 import { findGuildById, findGuildRoleByLowercaseName, findTextChannelById, findVoiceChannelById } from "./toolbox";
-import { joinVoice } from './voice';
+import { joinVoice, leaveVoice } from './voice';
 const youtubedl = require('youtube-dl');
 
 const exec = util.promisify(require('child_process').exec);
@@ -90,9 +90,6 @@ client.on(Events.ClientReady, () => {
 
     votes.initVotes(client, mainGuild);
     rules.initRules(client, mainGuild, ruleschannel);
-
-    if(audiochannel != undefined)
-        joinVoice(audiochannel, mainGuild);
 });
 
 client.on(Events.MessageCreate, (message : Message) => {
@@ -116,6 +113,7 @@ client.on(Events.MessageCreate, (message : Message) => {
     else if(msg === ".leavemsg")   { message.client.emit(Events.GuildMemberRemove, message.member); }
     else if(msg === ".checkroles") { commands?.checkRoles(mainGuild); }
     else if(msg === ".joinvoice" && audiochannel != undefined)  { joinVoice(audiochannel, mainGuild); }
+    else if(msg === ".leavevoice" && audiochannel != undefined) { leaveVoice(mainGuild); }
     else if(msg === "<@"+botid+">") { message.channel.send(message.author.toString()); }
     //else if(msg === "tetete") { publicchannel?.send("<@268156465674452994> ich will ein kind von dir 😩"); }
     else if(msg === ".benis-o-meter")

@@ -29,11 +29,12 @@ const token = require("../secret.json").token;
 const botid : string = require("../secret.json").botid;
 
 
-var mainGuild     : Guild | undefined;
-var publicchannel : TextChannel | undefined;
-var ruleschannel  : TextChannel | undefined;
-var audiochannel  : VoiceChannel | undefined;
-var weirdosrole   : Role | undefined;
+var mainGuild      : Guild | undefined;
+var publicchannel  : TextChannel | undefined;
+var bottestchannel : TextChannel | undefined;
+var ruleschannel   : TextChannel | undefined;
+var audiochannel   : VoiceChannel | undefined;
+var weirdosrole    : Role | undefined;
 /*var ari : GuildMember;
 var i = 0;
 var role : Role | undefined;
@@ -83,6 +84,7 @@ client.on(Events.ClientReady, () => {
     audiochannel  = findVoiceChannelById(mainGuild.channels, "1055250774944395285");
     ruleschannel  = findTextChannelById(mainGuild.channels, "1053846684280557588");
     publicchannel = findTextChannelById(mainGuild.channels, "1053792123071254550");
+    bottestchannel = findTextChannelById(mainGuild.channels, "1053861407394902066");
     weirdosrole   = findGuildRoleByLowercaseName(mainGuild, "weirdos");
 
     if(weirdosrole != undefined && publicchannel != undefined)
@@ -92,6 +94,18 @@ client.on(Events.ClientReady, () => {
     rules.initRules(client, mainGuild, ruleschannel);
 });
 
+function clearBotTest()
+{
+    bottestchannel?.fetch().then(botchannel => {
+        botchannel.messages.fetch({limit: 100}).then(messages => {
+            messages.forEach(msg => {
+                console.log("Deleting " + msg.content);
+                //msg.delete();
+            });
+        });
+    });
+}
+
 client.on(Events.MessageCreate, (message : Message) => {
     var msg = message.content.toLowerCase();
     if(message.author.id === botid)
@@ -99,7 +113,8 @@ client.on(Events.MessageCreate, (message : Message) => {
     if(mainGuild == undefined)
         return;
 
-    const badpattern = /[Tt]om[a-zA-Z]*[^ ]*/g;
+    //const badpattern = /[Tt]om[a-zA-Z]*[^ ]*/g;
+    const badpattern = /\b[Tt]+omm*[iy]+[^ ]*/g;
     if(msg.match(badpattern)?.[0].toLowerCase() != undefined && msg.match(badpattern)?.[0].toLowerCase() !== "tom")
     {
         message.channel.send(message.author.toString() + " schrieb: " + message.content.replace(badpattern, "Tom"))
@@ -114,6 +129,7 @@ client.on(Events.MessageCreate, (message : Message) => {
     else if(msg === ".checkroles") { commands?.checkRoles(mainGuild); }
     else if(msg === ".joinvoice" && audiochannel != undefined)  { joinVoice(audiochannel, mainGuild); }
     else if(msg === ".leavevoice" && audiochannel != undefined) { leaveVoice(); }
+    else if(msg === ".clearbottest") { clearBotTest(); }
     else if(msg === "<@"+botid+">") { message.channel.send(message.author.toString()); }
     //else if(msg === "tetete") { publicchannel?.send("<@268156465674452994> ich will ein kind von dir 😩"); }
     else if(msg === ".benis-o-meter")

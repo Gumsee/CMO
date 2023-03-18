@@ -37,6 +37,7 @@ const token = require("../secret.json").token;
 const botid = require("../secret.json").botid;
 var mainGuild;
 var publicchannel;
+var bottestchannel;
 var ruleschannel;
 var audiochannel;
 var weirdosrole;
@@ -56,12 +57,22 @@ client.on(discord_js_1.Events.ClientReady, () => {
     audiochannel = (0, toolbox_1.findVoiceChannelById)(mainGuild.channels, "1055250774944395285");
     ruleschannel = (0, toolbox_1.findTextChannelById)(mainGuild.channels, "1053846684280557588");
     publicchannel = (0, toolbox_1.findTextChannelById)(mainGuild.channels, "1053792123071254550");
+    bottestchannel = (0, toolbox_1.findTextChannelById)(mainGuild.channels, "1053861407394902066");
     weirdosrole = (0, toolbox_1.findGuildRoleByLowercaseName)(mainGuild, "weirdos");
     if (weirdosrole != undefined && publicchannel != undefined)
         commands = new commands_1.Commands(weirdosrole, publicchannel);
     votes.initVotes(client, mainGuild);
     rules.initRules(client, mainGuild, ruleschannel);
 });
+function clearBotTest() {
+    bottestchannel === null || bottestchannel === void 0 ? void 0 : bottestchannel.fetch().then(botchannel => {
+        botchannel.messages.fetch({ limit: 100 }).then(messages => {
+            messages.forEach(msg => {
+                console.log("Deleting " + msg.content);
+            });
+        });
+    });
+}
 client.on(discord_js_1.Events.MessageCreate, (message) => {
     var _a, _b;
     var msg = message.content.toLowerCase();
@@ -69,7 +80,7 @@ client.on(discord_js_1.Events.MessageCreate, (message) => {
         return;
     if (mainGuild == undefined)
         return;
-    const badpattern = /[Tt]om[a-zA-Z]*[^ ]*/g;
+    const badpattern = /\b[Tt]+omm*[iy]+[^ ]*/g;
     if (((_a = msg.match(badpattern)) === null || _a === void 0 ? void 0 : _a[0].toLowerCase()) != undefined && ((_b = msg.match(badpattern)) === null || _b === void 0 ? void 0 : _b[0].toLowerCase()) !== "tom") {
         message.channel.send(message.author.toString() + " schrieb: " + message.content.replace(badpattern, "Tom"));
         message.delete();
@@ -90,6 +101,9 @@ client.on(discord_js_1.Events.MessageCreate, (message) => {
     }
     else if (msg === ".leavevoice" && audiochannel != undefined) {
         (0, voice_1.leaveVoice)();
+    }
+    else if (msg === ".clearbottest") {
+        clearBotTest();
     }
     else if (msg === "<@" + botid + ">") {
         message.channel.send(message.author.toString());

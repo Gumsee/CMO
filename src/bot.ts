@@ -173,7 +173,7 @@ client.on(Events.GuildMemberAdd, (member : GuildMember) => {
 });
 
 client.on(Events.GuildMemberRemove, (member : GuildMember | PartialGuildMember) => {
-    publicchannel?.send(member.user.toString() + " (" + member.displayName + ") left us.. :c");
+    publicchannel?.send(member.user.toString() + " (" + member.displayName + " -> " + member.user.id + ") left us.. :c");
 });
 
 

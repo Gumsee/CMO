@@ -138,7 +138,7 @@ client.on(discord_js_1.Events.GuildMemberAdd, (member) => {
         member.roles.add(weirdosrole);
 });
 client.on(discord_js_1.Events.GuildMemberRemove, (member) => {
-    publicchannel === null || publicchannel === void 0 ? void 0 : publicchannel.send(member.user.toString() + "(" + member.displayName + ") left us.. :c");
+    publicchannel === null || publicchannel === void 0 ? void 0 : publicchannel.send(member.user.toString() + " (" + member.displayName + " -> " + member.user.id + ") left us.. :c");
 });
 client.on(discord_js_1.Events.InteractionCreate, (interaction) => {
     console.log("eh");

@@ -14,8 +14,8 @@ export function initRules(client : Client, mainguild : Guild, ruleschannel : Tex
 {
     rules.forEach(rule => {
         ruleschannel.fetch().then(() => {
-            channelContainsMessageByMe(ruleschannel, rule.setname).then((contains) => {
-                if(!contains)
+            channelContainsMessageByMe(ruleschannel, rule.setname).then((msg) => {
+                if(msg == undefined)
                     ruleschannel.send(rule.setname);
             });
         });

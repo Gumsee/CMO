@@ -19,11 +19,14 @@ function initVotes(client, mainguild) {
         if (channel == undefined)
             return;
         channel.fetch().then(() => {
-            (0, toolbox_1.channelContainsMessageByMe)(channel, vote.message).then((contains) => {
-                if (!contains) {
-                    channel.send(vote.message).then((msg) => {
-                        vote.answers.forEach(answer => msg.react(answer));
+            (0, toolbox_1.channelContainsMessageByMe)(channel, vote.message).then((msg) => {
+                if (msg == undefined) {
+                    channel.send(vote.message).then((nmsg) => {
+                        vote.answers.forEach(answer => nmsg.react(answer));
                     });
+                }
+                else {
+                    vote.answers.forEach(answer => msg.react(answer));
                 }
             });
         });

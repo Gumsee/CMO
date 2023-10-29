@@ -38,7 +38,7 @@ function findGuildRoleByLowercaseName(guild, name) {
 exports.findGuildRoleByLowercaseName = findGuildRoleByLowercaseName;
 function channelContainsMessageByMe(channel, message) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield channel.messages.fetch().then((messages) => messages.some(msg => msg.content === message && msg.author.id === botid));
+        return yield channel.messages.fetch().then((messages) => messages.find(msg => msg.content === message && msg.author.id === botid));
     });
 }
 exports.channelContainsMessageByMe = channelContainsMessageByMe;

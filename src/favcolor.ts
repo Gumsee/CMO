@@ -14,7 +14,6 @@ export class funcs extends VoteFuncs
     yellowrole    : Role | undefined;
     brownrole     : Role | undefined;
     greenrole     : Role | undefined;
-    roles : Role[] | undefined[] = new Array(5);
 
     constructor(mainguild : Guild, votechannel : TextChannel)
     {
@@ -30,11 +29,6 @@ export class funcs extends VoteFuncs
         this.yellowrole = mainguild.roles.cache.find((role : Role) => role.name.toLowerCase() == "yellow");
         this.brownrole  = mainguild.roles.cache.find((role : Role) => role.name.toLowerCase() == "brown");
         this.greenrole  = mainguild.roles.cache.find((role : Role) => role.name.toLowerCase() == "green");
-        this.roles[0] = this.redrole;
-        this.roles[1] = this.whiterole;
-        this.roles[2] = this.purplerole;
-        this.roles[3] = this.pinkrole;
-        this.roles[4] = this.bluerole;
     }
 
     getRoleFromEmoji(emoji : Emoji) : Role | undefined
@@ -42,7 +36,7 @@ export class funcs extends VoteFuncs
         var roletoset : Role | undefined;
         switch(emoji.toString())
         {
-            case "❤️":          roletoset = this.redrole;    break; //Red
+            case "❤️":           roletoset = this.redrole;    break; //Red
             case "🧡":          roletoset = this.orangerole; break; //Orange
             case "💛":          roletoset = this.yellowrole; break; //Yellow
             case "💚":          roletoset = this.greenrole;  break; //Green
@@ -51,7 +45,7 @@ export class funcs extends VoteFuncs
             case "🤎":          roletoset = this.brownrole;  break; //Brown
             case "🖤":          roletoset = this.blackrole;  break; //Black
             case "🤍":          roletoset = this.whiterole;  break; //White
-            case ":pinkheart:": roletoset = this.pinkrole;   break; //Pink
+            case "<:pinkheart:1168185778053054514>": roletoset = this.pinkrole;   break; //Pink
         }
 
         return roletoset;

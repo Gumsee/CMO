@@ -7,8 +7,8 @@ const rules = require("../rules.json").rulessets;
 function initRules(client, mainguild, ruleschannel) {
     rules.forEach(rule => {
         ruleschannel.fetch().then(() => {
-            (0, toolbox_1.channelContainsMessageByMe)(ruleschannel, rule.setname).then((contains) => {
-                if (!contains)
+            (0, toolbox_1.channelContainsMessageByMe)(ruleschannel, rule.setname).then((msg) => {
+                if (msg == undefined)
                     ruleschannel.send(rule.setname);
             });
         });

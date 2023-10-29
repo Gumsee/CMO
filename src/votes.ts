@@ -25,12 +25,16 @@ export function initVotes(client : Client, mainguild : Guild)
             return;
 
         channel.fetch().then(() => {
-            channelContainsMessageByMe(channel, vote.message).then((contains) => {
-                if(!contains)
+            channelContainsMessageByMe(channel, vote.message).then((msg) => {
+                if(msg == undefined)
                 {
-                    channel.send(vote.message).then((msg) => {
-                        vote.answers.forEach(answer => msg.react(answer));
+                    channel.send(vote.message).then((nmsg) => {
+                        vote.answers.forEach(answer => nmsg.react(answer));
                     });
+                }
+                else
+                {
+                    vote.answers.forEach(answer => msg.react(answer));
                 }
             });
         });

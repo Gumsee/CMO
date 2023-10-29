@@ -32,9 +32,9 @@ export function findGuildRoleByLowercaseName(guild : Guild, name : string) : Rol
     return guild.roles.cache.find(role => role.name.toLowerCase() === name);
 }
 
-export async function channelContainsMessageByMe(channel : TextChannel, message : string) : Promise<boolean>
+export async function channelContainsMessageByMe(channel : TextChannel, message : string) : Promise<Message|undefined>
 {
     return await channel.messages.fetch().then(
-        (messages) => messages.some(msg => msg.content === message && msg.author.id === botid)
+        (messages) => messages.find(msg => msg.content === message && msg.author.id === botid)
     );
 }

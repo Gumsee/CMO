@@ -6,7 +6,6 @@ const votefuncinterface_1 = require("./votefuncinterface");
 class funcs extends votefuncinterface_1.VoteFuncs {
     constructor(mainguild, votechannel) {
         super(mainguild, votechannel);
-        this.roles = new Array(5);
         this.redrole = mainguild.roles.cache.find((role) => role.name.toLowerCase() == "red");
         this.whiterole = mainguild.roles.cache.find((role) => role.name.toLowerCase() == "white");
         this.purplerole = mainguild.roles.cache.find((role) => role.name.toLowerCase() == "purple");
@@ -17,11 +16,6 @@ class funcs extends votefuncinterface_1.VoteFuncs {
         this.yellowrole = mainguild.roles.cache.find((role) => role.name.toLowerCase() == "yellow");
         this.brownrole = mainguild.roles.cache.find((role) => role.name.toLowerCase() == "brown");
         this.greenrole = mainguild.roles.cache.find((role) => role.name.toLowerCase() == "green");
-        this.roles[0] = this.redrole;
-        this.roles[1] = this.whiterole;
-        this.roles[2] = this.purplerole;
-        this.roles[3] = this.pinkrole;
-        this.roles[4] = this.bluerole;
     }
     getRoleFromEmoji(emoji) {
         var roletoset;
@@ -53,7 +47,7 @@ class funcs extends votefuncinterface_1.VoteFuncs {
             case "🤍":
                 roletoset = this.whiterole;
                 break;
-            case ":pinkheart:":
+            case "<:pinkheart:1168185778053054514>":
                 roletoset = this.pinkrole;
                 break;
         }

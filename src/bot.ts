@@ -123,29 +123,35 @@ client.on(Events.MessageCreate, (message : Message) => {
 
     if(message.member == null)
         return;
-    
-    if     (msg === ".joinmsg")    { message.client.emit(Events.GuildMemberAdd, message.member); }
-    else if(msg === ".leavemsg")   { message.client.emit(Events.GuildMemberRemove, message.member); }
-    else if(msg === ".checkroles") { commands?.checkRoles(mainGuild); }
-    else if(msg === ".joinvoice" && audiochannel != undefined)  { joinVoice(audiochannel, mainGuild); }
-    else if(msg === ".leavevoice" && audiochannel != undefined) { leaveVoice(); }
-    else if(msg === ".clearbottest") { clearBotTest(); }
-    else if(msg === "<@"+botid+">") { message.channel.send(message.author.toString()); }
-    //else if(msg === "tetete") { publicchannel?.send("<@268156465674452994> ich will ein kind von dir 😩"); }
-    else if(msg === ".benis-o-meter")
+
+    if(message.channelId === "1053861407394902066")
     {
-        var fullnum : number = 0;
-        for(var i = 0; i < message.author.id.length; i++)
+        if     (msg === ".joinmsg")    { message.client.emit(Events.GuildMemberAdd, message.member); }
+        else if(msg === ".leavemsg")   { message.client.emit(Events.GuildMemberRemove, message.member); }
+        else if(msg === ".checkroles") { commands?.checkRoles(mainGuild); }
+        else if(msg === ".joinvoice" && audiochannel != undefined)  { joinVoice(audiochannel, mainGuild); }
+        else if(msg === ".leavevoice" && audiochannel != undefined) { leaveVoice(); }
+        else if(msg === ".clearbottest") { clearBotTest(); }
+    }
+    else
+    {
+        if(msg === "<@"+botid+">") { message.channel.send(message.author.toString()); }
+        //else if(msg === "tetete") { publicchannel?.send("<@268156465674452994> ich will ein kind von dir 😩"); }
+        else if(msg === ".benis-o-meter")
         {
-            var num : number = Number(message.author.id.charAt(i));
-            fullnum += num;
+            var fullnum : number = 0;
+            for(var i = 0; i < message.author.id.length; i++)
+            {
+                var num : number = Number(message.author.id.charAt(i));
+                fullnum += num;
+            }
+            var length : number = fullnum % 20;
+            var diccStr : string = "8";
+            for(var i = 0; i < length; i++)
+                diccStr += "=";
+            diccStr += ">";
+            message.channel.send(message.author.toString() + "'s benis has length: " + length + "\n" + diccStr);
         }
-        var length : number = fullnum % 20;
-        var diccStr : string = "8";
-        for(var i = 0; i < length; i++)
-            diccStr += "=";
-        diccStr += ">";
-        message.channel.send(message.author.toString() + "'s benis has length: " + length + "\n" + diccStr);
     }
 
 });

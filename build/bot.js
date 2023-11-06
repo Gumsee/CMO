@@ -87,39 +87,43 @@ client.on(discord_js_1.Events.MessageCreate, (message) => {
     }
     if (message.member == null)
         return;
-    if (msg === ".joinmsg") {
-        message.client.emit(discord_js_1.Events.GuildMemberAdd, message.member);
-    }
-    else if (msg === ".leavemsg") {
-        message.client.emit(discord_js_1.Events.GuildMemberRemove, message.member);
-    }
-    else if (msg === ".checkroles") {
-        commands === null || commands === void 0 ? void 0 : commands.checkRoles(mainGuild);
-    }
-    else if (msg === ".joinvoice" && audiochannel != undefined) {
-        (0, voice_1.joinVoice)(audiochannel, mainGuild);
-    }
-    else if (msg === ".leavevoice" && audiochannel != undefined) {
-        (0, voice_1.leaveVoice)();
-    }
-    else if (msg === ".clearbottest") {
-        clearBotTest();
-    }
-    else if (msg === "<@" + botid + ">") {
-        message.channel.send(message.author.toString());
-    }
-    else if (msg === ".benis-o-meter") {
-        var fullnum = 0;
-        for (var i = 0; i < message.author.id.length; i++) {
-            var num = Number(message.author.id.charAt(i));
-            fullnum += num;
+    if (message.channelId === "1053861407394902066") {
+        if (msg === ".joinmsg") {
+            message.client.emit(discord_js_1.Events.GuildMemberAdd, message.member);
         }
-        var length = fullnum % 20;
-        var diccStr = "8";
-        for (var i = 0; i < length; i++)
-            diccStr += "=";
-        diccStr += ">";
-        message.channel.send(message.author.toString() + "'s benis has length: " + length + "\n" + diccStr);
+        else if (msg === ".leavemsg") {
+            message.client.emit(discord_js_1.Events.GuildMemberRemove, message.member);
+        }
+        else if (msg === ".checkroles") {
+            commands === null || commands === void 0 ? void 0 : commands.checkRoles(mainGuild);
+        }
+        else if (msg === ".joinvoice" && audiochannel != undefined) {
+            (0, voice_1.joinVoice)(audiochannel, mainGuild);
+        }
+        else if (msg === ".leavevoice" && audiochannel != undefined) {
+            (0, voice_1.leaveVoice)();
+        }
+        else if (msg === ".clearbottest") {
+            clearBotTest();
+        }
+    }
+    else {
+        if (msg === "<@" + botid + ">") {
+            message.channel.send(message.author.toString());
+        }
+        else if (msg === ".benis-o-meter") {
+            var fullnum = 0;
+            for (var i = 0; i < message.author.id.length; i++) {
+                var num = Number(message.author.id.charAt(i));
+                fullnum += num;
+            }
+            var length = fullnum % 20;
+            var diccStr = "8";
+            for (var i = 0; i < length; i++)
+                diccStr += "=";
+            diccStr += ">";
+            message.channel.send(message.author.toString() + "'s benis has length: " + length + "\n" + diccStr);
+        }
     }
 });
 client.on(discord_js_1.Events.GuildMemberAdd, (member) => {

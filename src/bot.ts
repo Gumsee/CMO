@@ -172,6 +172,10 @@ client.on(Events.MessageCreate, async (message : Message) => {
             message.reply(response.substring(i, i+1999));
         }
     }
+    if(msg.startsWith("gbt "))
+    {
+        message.reply("Diesen gbt konnte ich noch nie ausstehen..");
+    }
 
 });
 

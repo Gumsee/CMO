@@ -137,6 +137,9 @@ client.on(discord_js_1.Events.MessageCreate, (message) => __awaiter(void 0, void
             message.reply(response.substring(i, i + 1999));
         }
     }
+    if (msg.startsWith("gbt ")) {
+        message.reply("Diesen gbt konnte ich noch nie ausstehen..");
+    }
 }));
 client.on(discord_js_1.Events.GuildMemberAdd, (member) => {
     var url = "";

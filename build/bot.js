@@ -181,7 +181,10 @@ function generateResponse(prompt) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const chatCompletion = yield openai.chat.completions.create({
-                messages: [{ role: 'user', content: prompt }],
+                messages: [
+                    { role: 'system', content: "Du bist ein kleiner Roboter auf einem ET Discord Server, welcher versucht anderen zu helfen." },
+                    { role: 'user', content: prompt }
+                ],
                 model: 'gpt-3.5-turbo-16k',
             });
             return chatCompletion.choices[0].message.content;

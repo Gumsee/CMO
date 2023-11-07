@@ -130,9 +130,11 @@ client.on(discord_js_1.Events.MessageCreate, (message) => __awaiter(void 0, void
             message.channel.send(message.author.toString() + "'s benis has length: " + length + "\n" + diccStr);
         }
     }
-    if (msg.startsWith("gpt")) {
-        const response = yield generateResponse(message.content.substring(4));
-        message.channel.send(response.substring(0, 1999));
+    if (msg.startsWith("cmo")) {
+        const response = (yield generateResponse(message.content.substring(4))).replace("/[Oo]pen[Aa][Ii]/", "Gumse");
+        for (var i = 0; i < response.length; i += 2000) {
+            message.channel.send(response.substring(i, i + 1999));
+        }
     }
 }));
 client.on(discord_js_1.Events.GuildMemberAdd, (member) => {
@@ -186,7 +188,8 @@ function generateResponse(prompt) {
         }
         catch (error) {
             console.error('Error generating response:', error.response ? error.response.data : error);
-            return 'Sorry, I am unable to generate a response at this time.';
+            return 'Ich kann gerade nicht antworten..';
         }
+        return "";
     });
 }

@@ -163,10 +163,13 @@ client.on(Events.MessageCreate, async (message : Message) => {
         }
     }
 
-    if(msg.startsWith("gpt"))
+    if(msg.startsWith("cmo"))
     {
-        const response = await generateResponse(message.content.substring(4));
-        message.channel.send(response.substring(0, 1999));
+        const response = (await generateResponse(message.content.substring(4))).replace("/[Oo]pen[Aa][Ii]/", "Gumse");
+        for(var i = 0; i < response.length; i += 2000)
+        {
+            message.channel.send(response.substring(i, i+1999));
+        }
     }
 
 });
@@ -228,7 +231,7 @@ client.on(Events.MessageReactionRemove,
 client.on(Events.Error, () => { client.login(token) });
 client.login(token);
 
-async function generateResponse(prompt : any)
+async function generateResponse(prompt : any) : Promise<String>
 {
     try {
 
@@ -240,8 +243,10 @@ async function generateResponse(prompt : any)
         return chatCompletion.choices[0].message.content;
     } catch (error : any) {
         console.error('Error generating response:', error.response ? error.response.data : error);
-        return 'Sorry, I am unable to generate a response at this time.';
+        return 'Ich kann gerade nicht antworten..';
     }
+
+    return "";
 }
 
 

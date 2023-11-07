@@ -165,8 +165,8 @@ client.on(Events.MessageCreate, async (message : Message) => {
 
     if(msg.startsWith("cmo"))
     {
-        var prompt = "Ich heiße " + message.author.username + " und schreibe: " + message.content.substring(4);
-        const response = (await generateResponse(prompt)).replace("/[Oo]pen[Aa][Ii]/", "Gumse");
+        var prompt = message.content.substring(4);
+        const response = (await generateResponse(prompt, message.author.username)).replace("/[Oo]pen[Aa][Ii]/", "Gumse");
         for(var i = 0; i < response.length; i += 2000)
         {
             message.reply(response.substring(i, i+1999));
@@ -232,13 +232,14 @@ client.on(Events.MessageReactionRemove,
 client.on(Events.Error, () => { client.login(token) });
 client.login(token);
 
-async function generateResponse(prompt : any) : Promise<String>
+async function generateResponse(prompt : any, username : string) : Promise<String>
 {
     try {
 
         const chatCompletion = await openai.chat.completions.create({
             messages: [
                 {role: 'system', content: "Du bist ein kleiner Roboter auf einem ET Discord Server, welcher versucht anderen zu helfen. Zudem reagierst du auf sexuelle Fragen und Aussagen sehr angewidert und verstört."},
+                {role: 'system', content: "Mein name ist " + username},
                 {role: 'user',   content: prompt }
             ],
             model: 'gpt-3.5-turbo-16k',

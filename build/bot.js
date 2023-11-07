@@ -131,8 +131,8 @@ client.on(discord_js_1.Events.MessageCreate, (message) => __awaiter(void 0, void
         }
     }
     if (msg.startsWith("cmo")) {
-        var prompt = "Ich heiße " + message.author.username + " und schreibe: " + message.content.substring(4);
-        const response = (yield generateResponse(prompt)).replace("/[Oo]pen[Aa][Ii]/", "Gumse");
+        var prompt = message.content.substring(4);
+        const response = (yield generateResponse(prompt, message.author.username)).replace("/[Oo]pen[Aa][Ii]/", "Gumse");
         for (var i = 0; i < response.length; i += 2000) {
             message.reply(response.substring(i, i + 1999));
         }
@@ -178,12 +178,13 @@ client.on(discord_js_1.Events.MessageReactionAdd, (reaction, user) => messageRea
 client.on(discord_js_1.Events.MessageReactionRemove, (reaction, user) => messageReaction(reaction, user, true));
 client.on(discord_js_1.Events.Error, () => { client.login(token); });
 client.login(token);
-function generateResponse(prompt) {
+function generateResponse(prompt, username) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const chatCompletion = yield openai.chat.completions.create({
                 messages: [
                     { role: 'system', content: "Du bist ein kleiner Roboter auf einem ET Discord Server, welcher versucht anderen zu helfen. Zudem reagierst du auf sexuelle Fragen und Aussagen sehr angewidert und verstört." },
+                    { role: 'system', content: "Mein name ist " + username },
                     { role: 'user', content: prompt }
                 ],
                 model: 'gpt-3.5-turbo-16k',

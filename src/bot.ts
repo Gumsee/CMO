@@ -9,6 +9,7 @@ import { Commands } from "./commands";
 import { findGuildById, findGuildRoleByLowercaseName, findTextChannelById, findVoiceChannelById } from "./toolbox";
 import { joinVoice, leaveVoice } from './voice';
 const youtubedl = require('youtube-dl');
+const { OpenAI } = require('openai');
 
 const exec = util.promisify(require('child_process').exec);
 const client = new Client({
@@ -26,6 +27,7 @@ const client = new Client({
 var commands : Commands | undefined;
 
 const token = require("../secret.json").token;
+const gptapi = require("../secret.json").gptapi;
 const botid : string = require("../secret.json").botid;
 
 
@@ -72,6 +74,9 @@ async function testAll() {
 }
 //testAll();
 
+const openai = new OpenAI({ apiKey: gptapi });
+
+
 client.on(Events.ClientReady, () => {
     console.log(`Logged in as ${client.user?.tag}!`);
     client.user?.setStatus(PresenceUpdateStatus.Online);
@@ -106,8 +111,12 @@ function clearBotTest()
     });
 }
 
-client.on(Events.MessageCreate, (message : Message) => {
+client.on(Events.MessageCreate, async (message : Message) => {
+
     var msg = message.content.toLowerCase();
+
+    if (message.author.bot) 
+        return;
     if(message.author.id === botid)
         return;
     if(mainGuild == undefined)
@@ -152,6 +161,12 @@ client.on(Events.MessageCreate, (message : Message) => {
             diccStr += ">";
             message.channel.send(message.author.toString() + "'s benis has length: " + length + "\n" + diccStr);
         }
+    }
+
+    if(msg.startsWith("gpt"))
+    {
+        const response = await generateResponse(message.content.substring(4));
+        message.channel.send(response.substring(0, 1999));
     }
 
 });
@@ -212,6 +227,23 @@ client.on(Events.MessageReactionRemove,
 
 client.on(Events.Error, () => { client.login(token) });
 client.login(token);
+
+async function generateResponse(prompt : any)
+{
+    try {
+
+        const chatCompletion = await openai.chat.completions.create({
+            messages: [{ role: 'user', content: prompt }],
+            model: 'gpt-3.5-turbo-16k',
+        });
+
+        return chatCompletion.choices[0].message.content;
+    } catch (error : any) {
+        console.error('Error generating response:', error.response ? error.response.data : error);
+        return 'Sorry, I am unable to generate a response at this time.';
+    }
+}
+
 
 /*setInterval(function() {
     circleColors();

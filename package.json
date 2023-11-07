@@ -7,6 +7,7 @@
     "discord.js": "^14.6.0",
     "ffmpeg": "^0.0.4",
     "libsodium-wrappers": "^0.7.11",
+    "openai": "^4.16.1",
     "package.json": "^2.0.1",
     "sodium": "^3.0.2",
     "sodium-native": "^4.0.1",

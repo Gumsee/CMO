@@ -20,6 +20,7 @@ const commands_1 = require("./commands");
 const toolbox_1 = require("./toolbox");
 const voice_1 = require("./voice");
 const youtubedl = require('youtube-dl');
+const { OpenAI } = require('openai');
 const exec = util_1.default.promisify(require('child_process').exec);
 const client = new discord_js_1.Client({
     intents: [
@@ -34,6 +35,7 @@ const client = new discord_js_1.Client({
 });
 var commands;
 const token = require("../secret.json").token;
+const gptapi = require("../secret.json").gptapi;
 const botid = require("../secret.json").botid;
 var mainGuild;
 var publicchannel;
@@ -46,6 +48,7 @@ function testAll() {
         const video = youtubedl('http://www.youtube.com/watch?v=90AiXO1pAiA', ['--format=18'], { cwd: __dirname });
     });
 }
+const openai = new OpenAI({ apiKey: gptapi });
 client.on(discord_js_1.Events.ClientReady, () => {
     var _a, _b, _c;
     console.log(`Logged in as ${(_a = client.user) === null || _a === void 0 ? void 0 : _a.tag}!`);
@@ -73,9 +76,11 @@ function clearBotTest() {
         });
     });
 }
-client.on(discord_js_1.Events.MessageCreate, (message) => {
+client.on(discord_js_1.Events.MessageCreate, (message) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     var msg = message.content.toLowerCase();
+    if (message.author.bot)
+        return;
     if (message.author.id === botid)
         return;
     if (mainGuild == undefined)
@@ -125,7 +130,11 @@ client.on(discord_js_1.Events.MessageCreate, (message) => {
             message.channel.send(message.author.toString() + "'s benis has length: " + length + "\n" + diccStr);
         }
     }
-});
+    if (msg.startsWith("gpt")) {
+        const response = yield generateResponse(message.content.substring(4));
+        message.channel.send(response.substring(0, 1999));
+    }
+}));
 client.on(discord_js_1.Events.GuildMemberAdd, (member) => {
     var url = "";
     if (member.guild.iconURL({}) != null)
@@ -166,3 +175,18 @@ client.on(discord_js_1.Events.MessageReactionAdd, (reaction, user) => messageRea
 client.on(discord_js_1.Events.MessageReactionRemove, (reaction, user) => messageReaction(reaction, user, true));
 client.on(discord_js_1.Events.Error, () => { client.login(token); });
 client.login(token);
+function generateResponse(prompt) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const chatCompletion = yield openai.chat.completions.create({
+                messages: [{ role: 'user', content: prompt }],
+                model: 'gpt-3.5-turbo-16k',
+            });
+            return chatCompletion.choices[0].message.content;
+        }
+        catch (error) {
+            console.error('Error generating response:', error.response ? error.response.data : error);
+            return 'Sorry, I am unable to generate a response at this time.';
+        }
+    });
+}

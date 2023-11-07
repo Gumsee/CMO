@@ -237,7 +237,7 @@ async function generateResponse(prompt : any) : Promise<String>
 
         const chatCompletion = await openai.chat.completions.create({
             messages: [
-                {role: 'system', content: "Du bist ein kleiner Roboter auf einem ET Discord Server, welcher versucht anderen zu helfen."},
+                {role: 'system', content: "Du bist ein kleiner Roboter auf einem ET Discord Server, welcher versucht anderen zu helfen. Zudem reagierst du auf sexuelle Fragen und Aussagen sehr angewidert und verstört."},
                 {role: 'user',   content: prompt }
             ],
             model: 'gpt-3.5-turbo-16k',

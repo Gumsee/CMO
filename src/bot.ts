@@ -165,7 +165,8 @@ client.on(Events.MessageCreate, async (message : Message) => {
 
     if(msg.startsWith("cmo"))
     {
-        const response = (await generateResponse(message.content.substring(4))).replace("/[Oo]pen[Aa][Ii]/", "Gumse");
+        var prompt = "Ich heiße " + message.author.username + " und schreibe: " + message.content.substring(4);
+        const response = (await generateResponse(prompt)).replace("/[Oo]pen[Aa][Ii]/", "Gumse");
         for(var i = 0; i < response.length; i += 2000)
         {
             message.reply(response.substring(i, i+1999));

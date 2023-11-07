@@ -133,7 +133,7 @@ client.on(discord_js_1.Events.MessageCreate, (message) => __awaiter(void 0, void
     if (msg.startsWith("cmo")) {
         const response = (yield generateResponse(message.content.substring(4))).replace("/[Oo]pen[Aa][Ii]/", "Gumse");
         for (var i = 0; i < response.length; i += 2000) {
-            message.channel.send(response.substring(i, i + 1999));
+            message.reply(response.substring(i, i + 1999));
         }
     }
 }));

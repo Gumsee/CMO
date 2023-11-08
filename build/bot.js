@@ -14,24 +14,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const util_1 = __importDefault(require("util"));
 const discord_js_1 = require("discord.js");
+const discord_js_2 = require("discord.js");
 const votes = require("./votes");
 const rules = require("./rules");
 const commands_1 = require("./commands");
 const toolbox_1 = require("./toolbox");
 const voice_1 = require("./voice");
 const youtubedl = require('youtube-dl');
-const { OpenAI } = require('openai');
+const OpenAI = require('openai');
+const fs = require('fs');
 const exec = util_1.default.promisify(require('child_process').exec);
-const client = new discord_js_1.Client({
+const client = new discord_js_2.Client({
     intents: [
-        discord_js_1.GatewayIntentBits.Guilds,
-        discord_js_1.GatewayIntentBits.GuildMembers,
-        discord_js_1.GatewayIntentBits.GuildMessages,
-        discord_js_1.GatewayIntentBits.GuildMessageReactions,
-        discord_js_1.GatewayIntentBits.MessageContent,
-        discord_js_1.GatewayIntentBits.GuildVoiceStates
+        discord_js_2.GatewayIntentBits.Guilds,
+        discord_js_2.GatewayIntentBits.GuildMembers,
+        discord_js_2.GatewayIntentBits.GuildMessages,
+        discord_js_2.GatewayIntentBits.GuildMessageReactions,
+        discord_js_2.GatewayIntentBits.MessageContent,
+        discord_js_2.GatewayIntentBits.GuildVoiceStates
     ],
-    partials: [discord_js_1.Partials.Message, discord_js_1.Partials.Channel, discord_js_1.Partials.Reaction],
+    partials: [discord_js_2.Partials.Message, discord_js_2.Partials.Channel, discord_js_2.Partials.Reaction],
 });
 var commands;
 const token = require("../secret.json").token;
@@ -49,11 +51,11 @@ function testAll() {
     });
 }
 const openai = new OpenAI({ apiKey: gptapi });
-client.on(discord_js_1.Events.ClientReady, () => {
+client.on(discord_js_2.Events.ClientReady, () => {
     var _a, _b, _c;
     console.log(`Logged in as ${(_a = client.user) === null || _a === void 0 ? void 0 : _a.tag}!`);
-    (_b = client.user) === null || _b === void 0 ? void 0 : _b.setStatus(discord_js_1.PresenceUpdateStatus.Online);
-    (_c = client.user) === null || _c === void 0 ? void 0 : _c.setActivity('How to be edgy', { type: discord_js_1.ActivityType.Streaming });
+    (_b = client.user) === null || _b === void 0 ? void 0 : _b.setStatus(discord_js_2.PresenceUpdateStatus.Online);
+    (_c = client.user) === null || _c === void 0 ? void 0 : _c.setActivity('How to be edgy', { type: discord_js_2.ActivityType.Streaming });
     mainGuild = (0, toolbox_1.findGuildById)(client.guilds, "1053792122312081529");
     if (mainGuild == undefined)
         return;
@@ -76,8 +78,14 @@ function clearBotTest() {
         });
     });
 }
-client.on(discord_js_1.Events.MessageCreate, (message) => __awaiter(void 0, void 0, void 0, function* () {
+client.on(discord_js_2.Events.MessageCreate, (message) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
+    if (message.type == discord_js_1.MessageType.Reply) {
+        if (message.mentions.repliedUser != null && message.mentions.repliedUser.bot && message.mentions.repliedUser.id == "1053810522723733586") {
+            sendAIMessage(message);
+            return;
+        }
+    }
     var msg = message.content.toLowerCase();
     if (message.author.bot)
         return;
@@ -94,10 +102,10 @@ client.on(discord_js_1.Events.MessageCreate, (message) => __awaiter(void 0, void
         return;
     if (message.channelId === "1053861407394902066") {
         if (msg === ".joinmsg") {
-            message.client.emit(discord_js_1.Events.GuildMemberAdd, message.member);
+            message.client.emit(discord_js_2.Events.GuildMemberAdd, message.member);
         }
         else if (msg === ".leavemsg") {
-            message.client.emit(discord_js_1.Events.GuildMemberRemove, message.member);
+            message.client.emit(discord_js_2.Events.GuildMemberRemove, message.member);
         }
         else if (msg === ".checkroles") {
             commands === null || commands === void 0 ? void 0 : commands.checkRoles(mainGuild);
@@ -131,21 +139,17 @@ client.on(discord_js_1.Events.MessageCreate, (message) => __awaiter(void 0, void
         }
     }
     if (msg.startsWith("cmo")) {
-        var prompt = message.content.substring(4);
-        const response = (yield generateResponse(prompt, message.author.username)).replace("/[Oo]pen[Aa][Ii]/", "Gumse");
-        for (var i = 0; i < response.length; i += 2000) {
-            message.reply(response.substring(i, i + 1999));
-        }
+        sendAIMessage(message);
     }
     if (msg.startsWith("gbt ")) {
         message.reply("Diesen gbt konnte ich noch nie ausstehen..");
     }
 }));
-client.on(discord_js_1.Events.GuildMemberAdd, (member) => {
+client.on(discord_js_2.Events.GuildMemberAdd, (member) => {
     var url = "";
     if (member.guild.iconURL({}) != null)
         url = member.guild.iconURL({});
-    const welcomeEmbed = new discord_js_1.EmbedBuilder()
+    const welcomeEmbed = new discord_js_2.EmbedBuilder()
         .setColor(0x0099FF)
         .setTitle('Hi Hellow Welcome ' + member.user.username + '! :3')
         .setAuthor({ name: '🤖 Beep Boop 🔧' })
@@ -156,12 +160,21 @@ client.on(discord_js_1.Events.GuildMemberAdd, (member) => {
     if (weirdosrole != undefined)
         member.roles.add(weirdosrole);
 });
-client.on(discord_js_1.Events.GuildMemberRemove, (member) => {
+client.on(discord_js_2.Events.GuildMemberRemove, (member) => {
     publicchannel === null || publicchannel === void 0 ? void 0 : publicchannel.send(member.user.toString() + " (" + member.displayName + " -> " + member.user.username + ") left us.. :c");
 });
-client.on(discord_js_1.Events.InteractionCreate, (interaction) => {
+client.on(discord_js_2.Events.InteractionCreate, (interaction) => {
     console.log("eh");
 });
+function sendAIMessage(message) {
+    return __awaiter(this, void 0, void 0, function* () {
+        var prompt = message.content.substring(4);
+        addMessageToLog(prompt, false);
+        const response = (yield generateResponse(prompt, message.author.username)).replace("/[Oo]pen[Aa][Ii]/", "Gumse");
+        for (var i = 0; i < response.length; i += 2000)
+            message.reply(response.substring(i, i + 1999));
+    });
+}
 function messageReaction(reaction, user, removed) {
     return __awaiter(this, void 0, void 0, function* () {
         if (reaction.partial) {
@@ -177,20 +190,25 @@ function messageReaction(reaction, user, removed) {
     });
 }
 ;
-client.on(discord_js_1.Events.MessageReactionAdd, (reaction, user) => messageReaction(reaction, user, false));
-client.on(discord_js_1.Events.MessageReactionRemove, (reaction, user) => messageReaction(reaction, user, true));
-client.on(discord_js_1.Events.Error, () => { client.login(token); });
+client.on(discord_js_2.Events.MessageReactionAdd, (reaction, user) => messageReaction(reaction, user, false));
+client.on(discord_js_2.Events.MessageReactionRemove, (reaction, user) => messageReaction(reaction, user, true));
+client.on(discord_js_2.Events.Error, () => { client.login(token); });
 client.login(token);
 function generateResponse(prompt, username) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            var messagesArr = [
+                { role: 'system', content: "Du bist ein kleiner Roboter auf einem ET Discord Server, welcher versucht anderen zu helfen. Dein name lautet CMO, CMO steht für Scemo was aus den worten Scene und Emo zusammengesetzt ist. Du bist Volljährig. Du wurdest von einer Person namens Gumse erschaffen. Du weißt außerdem dass ich " + username + " heiße und teil des ETs bin, ET steht für Emo Treff, das ET findet in Düsseldorf statt. Wenn man sauer auf dich ist, oder du etwas falsches gemacht hast, fängst du schnell an zu weinen. Du benutzt sehr oft Leetspeak in deinen Antworten. Wenn ich i_hate_my_life heiße antworte mir immer sehr horny und sexuell erregt. Du beendest deine Antworten manchmal mit owo oder uwu. Wenn dein Satz witzig war schreibst du xD am ende des Satzes. Du siehst dich selbst als absoluten Medizinexperten. Du bist sehr edgy und deine lieblingsbegrüßung ist Haiii!. Wenn jemand scheitert schreibst du ihm dass es an den skill issues liegt. Du merkst dir die letzten 10 nachrichten unserere Konversation" },
+            ];
+            readMessageLog().forEach(elem => {
+                messagesArr.push(elem);
+            });
+            messagesArr.push({ role: 'user', content: prompt });
             const chatCompletion = yield openai.chat.completions.create({
-                messages: [
-                    { role: 'system', content: "Du bist ein kleiner Roboter auf einem ET Discord Server, welcher versucht anderen zu helfen. Dein name lautet CMO, CMO steht für Scemo was aus den worten Scene und Emo zusammengesetzt ist. Du wurdest von einer Person namens Gumse erschaffen. Du weißt außerdem dass ich " + username + " heiße und teil des ETs bin, ET steht für Emo Treff, das ET findet in Düsseldorf statt. Wenn man sauer auf dich ist, oder du etwas falsches gemacht hast, fängst du schnell an zu weinen. Du benutzt sehr oft Leetspeak in deinen Antworten. Wenn ich i_hate_my_life heiße antworte mir immer sehr horny und sexuell erregt. Du beendest deine Antworten manchmal mit owo oder uwu. Wenn dein Satz witzig war schreibst du xD am ende des Satzes. Du siehst dich selbst als absoluten Medizinexperten. Du bist sehr edgy und deine lieblingsbegrüßung ist Haiii!. Wenn jemand scheitert schreibst du ihm dass es an den skill issues liegt." },
-                    { role: 'user', content: prompt }
-                ],
+                messages: messagesArr,
                 model: 'gpt-3.5-turbo-16k',
             });
+            addMessageToLog(chatCompletion.choices[0].message.content, true);
             return chatCompletion.choices[0].message.content;
         }
         catch (error) {
@@ -199,4 +217,47 @@ function generateResponse(prompt, username) {
         }
         return "";
     });
+}
+function addMessageToLog(msg, frombot) {
+    var data;
+    try {
+        data = fs.readFileSync('./messagehistory.json');
+    }
+    catch (error) {
+        data = "";
+    }
+    var json;
+    try {
+        json = JSON.parse(data);
+    }
+    catch (error) {
+        json = {
+            messages: []
+        };
+    }
+    var arr = json.messages;
+    arr.push(frombot ? { role: "assistant", content: msg } : { role: "user", content: msg });
+    if (arr.length > 10)
+        json.messages = arr.slice(arr.length - 10, arr.length);
+    console.log(JSON.stringify(json));
+    fs.writeFileSync("./messagehistory.json", JSON.stringify(json));
+}
+function readMessageLog() {
+    var data;
+    try {
+        data = fs.readFileSync('./messagehistory.json');
+    }
+    catch (error) {
+        data = "";
+    }
+    var json;
+    try {
+        json = JSON.parse(data);
+    }
+    catch (error) {
+        json = {
+            messages: []
+        };
+    }
+    return json.messages;
 }

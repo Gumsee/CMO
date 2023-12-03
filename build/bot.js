@@ -20,7 +20,7 @@ const rules = require("./rules");
 const commands_1 = require("./commands");
 const toolbox_1 = require("./toolbox");
 const voice_1 = require("./voice");
-const youtubedl = require('youtube-dl');
+const ytdl = require('ytdl-core');
 const OpenAI = require('openai');
 const fs = require('fs');
 const exec = util_1.default.promisify(require('child_process').exec);
@@ -30,6 +30,7 @@ const client = new discord_js_2.Client({
         discord_js_2.GatewayIntentBits.GuildMembers,
         discord_js_2.GatewayIntentBits.GuildMessages,
         discord_js_2.GatewayIntentBits.GuildMessageReactions,
+        discord_js_2.GatewayIntentBits.GuildPresences,
         discord_js_2.GatewayIntentBits.MessageContent,
         discord_js_2.GatewayIntentBits.GuildVoiceStates
     ],
@@ -47,7 +48,6 @@ var audiochannel;
 var weirdosrole;
 function testAll() {
     return __awaiter(this, void 0, void 0, function* () {
-        const video = youtubedl('http://www.youtube.com/watch?v=90AiXO1pAiA', ['--format=18'], { cwd: __dirname });
     });
 }
 const openai = new OpenAI({ apiKey: gptapi });
@@ -110,9 +110,6 @@ client.on(discord_js_2.Events.MessageCreate, (message) => __awaiter(void 0, void
         else if (msg === ".checkroles") {
             commands === null || commands === void 0 ? void 0 : commands.checkRoles(mainGuild);
         }
-        else if (msg === ".joinvoice" && audiochannel != undefined) {
-            (0, voice_1.joinVoice)(audiochannel, mainGuild);
-        }
         else if (msg === ".leavevoice" && audiochannel != undefined) {
             (0, voice_1.leaveVoice)();
         }
@@ -137,8 +134,18 @@ client.on(discord_js_2.Events.MessageCreate, (message) => __awaiter(void 0, void
             diccStr += ">";
             message.channel.send(message.author.toString() + "'s benis has length: " + length + "\n" + diccStr);
         }
+        else if (msg.startsWith(".yt")) {
+            var member = message.member;
+            if (member.voice.channel === undefined || member.voice.channel === null) {
+                message.reply("ur not connected to any vc man");
+            }
+            else {
+                var voicechannel = member.voice.channel;
+                (0, voice_1.joinVoice)(voicechannel, mainGuild, message.content.substring(4));
+            }
+        }
     }
-    if (msg.startsWith("cmo")) {
+    if (msg.includes(" cmo") || msg.startsWith("cmo")) {
         sendAIMessage(message);
     }
     if (msg.startsWith("gbt ")) {
@@ -239,7 +246,6 @@ function addMessageToLog(msg, frombot) {
     arr.push(frombot ? { role: "assistant", content: msg } : { role: "user", content: msg });
     if (arr.length > 10)
         json.messages = arr.slice(arr.length - 10, arr.length);
-    console.log(JSON.stringify(json));
     fs.writeFileSync("./messagehistory.json", JSON.stringify(json));
 }
 function readMessageLog() {

@@ -8,7 +8,7 @@ const rules = require("./rules");
 import { Commands } from "./commands";
 import { findGuildById, findGuildRoleByLowercaseName, findTextChannelById, findVoiceChannelById } from "./toolbox";
 import { joinVoice, leaveVoice } from './voice';
-const youtubedl = require('youtube-dl');
+const ytdl = require('ytdl-core');
 const OpenAI = require('openai');
 const fs = require('fs');
 
@@ -19,18 +19,19 @@ const client = new Client({
         GatewayIntentBits.GuildMembers, 
         GatewayIntentBits.GuildMessages, 
         GatewayIntentBits.GuildMessageReactions, 
+        GatewayIntentBits.GuildPresences,
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildVoiceStates
     ],
     partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
 
+
 var commands : Commands | undefined;
 
 const token = require("../secret.json").token;
 const gptapi = require("../secret.json").gptapi;
 const botid : string = require("../secret.json").botid;
-
 
 var mainGuild      : Guild | undefined;
 var publicchannel  : TextChannel | undefined;
@@ -60,9 +61,9 @@ function circleColors()
 }*/
 
 async function testAll() {
-    const video = youtubedl('http://www.youtube.com/watch?v=90AiXO1pAiA',
-    ['--format=18'],     // Optional arguments passed to youtube-dl.
-    { cwd: __dirname }); // Additional options can be given for calling `child_process.execFile()`.
+    //const video = youtubedl('http://www.youtube.com/watch?v=90AiXO1pAiA',
+    //['--format=18'],     // Optional arguments passed to youtube-dl.
+    //{ cwd: __dirname }); // Additional options can be given for calling `child_process.execFile()`.
 
     //Will be called when the download starts.
     /*video.on('info', function(info) {
@@ -147,7 +148,7 @@ client.on(Events.MessageCreate, async (message : Message) => {
         if     (msg === ".joinmsg")    { message.client.emit(Events.GuildMemberAdd, message.member); }
         else if(msg === ".leavemsg")   { message.client.emit(Events.GuildMemberRemove, message.member); }
         else if(msg === ".checkroles") { commands?.checkRoles(mainGuild); }
-        else if(msg === ".joinvoice" && audiochannel != undefined)  { joinVoice(audiochannel, mainGuild); }
+//        else if(msg === ".joinvoice" && audiochannel != undefined)  { joinVoice(audiochannel, mainGuild); }
         else if(msg === ".leavevoice" && audiochannel != undefined) { leaveVoice(); }
         else if(msg === ".clearbottest") { clearBotTest(); }
     }
@@ -170,9 +171,32 @@ client.on(Events.MessageCreate, async (message : Message) => {
             diccStr += ">";
             message.channel.send(message.author.toString() + "'s benis has length: " + length + "\n" + diccStr);
         }
+        else if (msg.startsWith(".yt"))
+        {
+            var member = message.member;
+            if(member.voice.channel === undefined || member.voice.channel === null) 
+            {
+                message.reply("ur not connected to any vc man");
+            }
+            //else if(member.voice.channel instanceof StageChannel)
+            //{
+            //    message.reply("ur in a stage channel, not joining that");
+            //}
+            else 
+            {
+                var voicechannel = member.voice.channel;
+                //message.reply("ur connected to " + voicechannel.name + ", congrats");
+
+                //console.log(voicechannel);
+                joinVoice(voicechannel, mainGuild, message.content.substring(4));
+                //playAudio
+            }
+
+            //message.reply("Playing: ");
+        }
     }
 
-    if(msg.startsWith("cmo"))
+    if(msg.includes(" cmo") || msg.startsWith("cmo"))
     {
         sendAIMessage(message);
     }
@@ -294,7 +318,7 @@ function addMessageToLog(msg : string, frombot : boolean) : void
     if(arr.length > 10)
         json.messages = arr.slice(arr.length - 10, arr.length);
 
-    console.log(JSON.stringify(json));
+    //console.log(JSON.stringify(json));
     fs.writeFileSync("./messagehistory.json", JSON.stringify(json))
 }
 

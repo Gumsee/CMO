@@ -147,7 +147,6 @@ client.on(Events.MessageCreate, async (message : Message) => {
     {
         if     (msg === ".joinmsg")    { message.client.emit(Events.GuildMemberAdd, message.member); }
         else if(msg === ".leavemsg")   { message.client.emit(Events.GuildMemberRemove, message.member); }
-        else if(msg === ".checkroles") { commands?.checkRoles(mainGuild); }
 //        else if(msg === ".joinvoice" && audiochannel != undefined)  { joinVoice(audiochannel, mainGuild); }
         else if(msg === ".leavevoice" && audiochannel != undefined) { leaveVoice(); }
         else if(msg === ".clearbottest") { clearBotTest(); }
@@ -156,6 +155,7 @@ client.on(Events.MessageCreate, async (message : Message) => {
     {
         if(msg === "<@"+botid+">") { message.channel.send(message.author.toString()); }
         //else if(msg === "tetete") { publicchannel?.send("<@268156465674452994> ich will ein kind von dir 😩"); }
+        else if(msg === ".checkroles") { commands?.checkRoles(mainGuild); }
         else if(msg === ".benis-o-meter")
         {
             var fullnum : number = 0;

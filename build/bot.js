@@ -107,9 +107,6 @@ client.on(discord_js_2.Events.MessageCreate, (message) => __awaiter(void 0, void
         else if (msg === ".leavemsg") {
             message.client.emit(discord_js_2.Events.GuildMemberRemove, message.member);
         }
-        else if (msg === ".checkroles") {
-            commands === null || commands === void 0 ? void 0 : commands.checkRoles(mainGuild);
-        }
         else if (msg === ".leavevoice" && audiochannel != undefined) {
             (0, voice_1.leaveVoice)();
         }
@@ -120,6 +117,9 @@ client.on(discord_js_2.Events.MessageCreate, (message) => __awaiter(void 0, void
     else {
         if (msg === "<@" + botid + ">") {
             message.channel.send(message.author.toString());
+        }
+        else if (msg === ".checkroles") {
+            commands === null || commands === void 0 ? void 0 : commands.checkRoles(mainGuild);
         }
         else if (msg === ".benis-o-meter") {
             var fullnum = 0;
